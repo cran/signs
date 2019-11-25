@@ -39,7 +39,6 @@
 #'
 #' @return A \code{UTF-8} character vector
 #' @import scales
-#' @importFrom rlang "%||%"
 #' @export
 #'
 #' @examples
@@ -53,15 +52,10 @@
 #' signs(x, accuracy = .1, scale = .1, trim_leading_zeros = TRUE)
 signs <- function(x,
                   ...,
-                  format = getOption("signs.format"),
-                  add_plusses = getOption("signs.add.plusses"),
-                  trim_leading_zeros = getOption("signs.trim.leading.zeros"),
-                  label_at_zero = getOption("signs.label.at.zero")) {
-
-  format             <- format             %||% scales::number
-  add_plusses        <- add_plusses        %||% FALSE
-  trim_leading_zeros <- trim_leading_zeros %||% FALSE
-  label_at_zero      <- label_at_zero      %||% "none"
+                  format = getOption("signs.format", scales::number),
+                  add_plusses = getOption("signs.add.plusses", FALSE),
+                  trim_leading_zeros = getOption("signs.trim.leading.zeros", FALSE),
+                  label_at_zero = getOption("signs.label.at.zero", "none")) {
 
   if (!is.numeric(x)) stop("`x` should be a numeric vector.")
   check_args(
@@ -84,9 +78,9 @@ signs <- function(x,
   }
   response[considered_zero] <- switch(
     label_at_zero,
-    "none"   = response[considered_zero],
-    "blank"  = "",
-    "symbol" = paste0("\u00b1", response[considered_zero])
+    none   = response[considered_zero],
+    blank  = "",
+    symbol = paste0("\u00b1", response[considered_zero])
   )
   response <- gsub("-", "\u2212", response)
 
@@ -119,7 +113,6 @@ signs <- function(x,
 #' @return A function that takes a numeric vector
 #'   and returns a \code{UTF-8} character vector
 #' @import scales rlang
-#' @importFrom rlang "%||%"
 #' @export
 #'
 #' @examples
@@ -145,14 +138,10 @@ signs <- function(x,
 #' f6(x)
 signs_format <-
   function(...,
-           format = getOption("signs.format"),
-           add_plusses = getOption("signs.add.plusses"),
-           trim_leading_zeros = getOption("signs.trim.leading.zeros"),
-           label_at_zero = getOption("signs.label.at.zero")) {
-  format             <- format             %||% scales::number
-  add_plusses        <- add_plusses        %||% FALSE
-  trim_leading_zeros <- trim_leading_zeros %||% FALSE
-  label_at_zero      <- label_at_zero      %||% "none"
+           format = getOption("signs.format", scales::number),
+           add_plusses = getOption("signs.add.plusses", FALSE),
+           trim_leading_zeros = getOption("signs.trim.leading.zeros", FALSE),
+           label_at_zero = getOption("signs.label.at.zero", "none")) {
 
   dots <- rlang::list2(...)
   check_args(

@@ -5,7 +5,7 @@ test_that(
   "the basics work",
   {
     expect_equal(
-      signs(x),
+      signs(x, accuracy = 1),
       c("\u22121", "0", "1")
     )
     expect_equal(
@@ -13,42 +13,20 @@ test_that(
       c("\u22121%", "0%", "1%")
     )
     expect_equal(
-      signs(x, add_plusses = TRUE),
+      signs(x, accuracy = 1, add_plusses = TRUE),
       c("\u22121", "0", "+1")
     )
     expect_equal(
-      signs(x, label_at_zero = "blank"),
+      signs(x, accuracy = 1, label_at_zero = "blank"),
       c("\u22121", "", "1")
     )
     expect_equal(
-      signs(x, label_at_zero = "symbol"),
+      signs(x, accuracy = 1, label_at_zero = "symbol"),
       c("\u22121", "\u00b10", "1")
     )
     expect_equal(
       signs(x, accuracy = .1, scale = .1, trim_leading_zeros = TRUE),
       c("\u2212.1", ".0", ".1")
-    )
-  }
-)
-
-test_that(
-  "function still works when options aren't set",
-  {
-    expect_equal(
-      signs(x, format = NULL),
-      c("\u22121", "0", "1")
-    )
-    expect_equal(
-      signs(x, add_plusses = NULL),
-      c("\u22121", "0", "1")
-    )
-    expect_equal(
-      signs(x, trim_leading_zeros = NULL),
-      c("\u22121", "0", "1")
-    )
-    expect_equal(
-      signs(x, label_at_zero = NULL),
-      c("\u22121", "0", "1")
     )
   }
 )
@@ -64,16 +42,18 @@ test_that(
       signs(x, format = "goobers"),
       cat(
         "`format` should be a function that returns a character vector,",
-        "such as `as.character` or `scales::number`.",
-        "Consider setting a default with `options(signs.format=your_function)`."
+        "such as `scales::number` or `as.character`.",
+        "Consider setting a default with",
+        "`options(signs.format = your_function)`."
       )
     )
     expect_error(
       signs(x, format = exp),
       cat(
         "`format` should be a function that returns a character vector,",
-        "such as `as.character` or `scales::number`.",
-        "Consider setting a default with `options(signs.format=your_function)`."
+        "such as `scales::number` or `as.character`.",
+        "Consider setting a default with",
+        "`options(signs.format = your_function)`."
       )
     )
     expect_error(
@@ -111,15 +91,15 @@ test_that(
   "formatted as zero counts as zero",
   {
     expect_equal(
-      signs(x, scale = .1, label_at_zero = "none"),
+      signs(x, accuracy = 1, scale = .1, label_at_zero = "none"),
       c("0", "0", "0")
     )
     expect_equal(
-      signs(x, scale = .1, label_at_zero = "blank"),
+      signs(x, accuracy = 1, scale = .1, label_at_zero = "blank"),
       c("", "", "")
     )
     expect_equal(
-      signs(x, scale = .1, label_at_zero = "symbol"),
+      signs(x, accuracy = 1, scale = .1, label_at_zero = "symbol"),
       c("\u00b10", "\u00b10", "\u00b10")
     )
   }
@@ -129,11 +109,17 @@ test_that(
   "scientific notation works",
   {
     expect_equal(
-      signs(x, scale = 1e-3, format = scales::scientific),
+      signs(x, accuracy = 1, scale = 1e-3, format = scales::scientific),
       c("\u22121e\u221203", "0e+00", "1e\u221203")
     )
     expect_equal(
-      signs(x, scale = 1e+3, format = scales::scientific, add_plusses = TRUE),
+      signs(
+        x,
+        accuracy    = 1,
+        scale       = 1e+3,
+        format      = scales::scientific,
+        add_plusses = TRUE
+      ),
       c("\u22121e+03", "0e+00", "+1e+03")
     )
   }
@@ -143,15 +129,15 @@ test_that(
   "janky scientific notation works",
   {
     expect_equal(
-      signs(x, suffix = "e+03", label_at_zero = "none"),
+      signs(x, accuracy = 1, suffix = "e+03", label_at_zero = "none"),
       c("\u22121e+03", "0e+03", "1e+03")
     )
     expect_equal(
-      signs(x, suffix = "e+03", label_at_zero = "blank"),
+      signs(x, accuracy = 1, suffix = "e+03", label_at_zero = "blank"),
       c("\u22121e+03", "", "1e+03")
     )
     expect_equal(
-      signs(x, suffix = "e+03", label_at_zero = "symbol"),
+      signs(x, accuracy = 1, suffix = "e+03", label_at_zero = "symbol"),
       c("\u22121e+03", "\u00b10e+03", "1e+03")
     )
   }
