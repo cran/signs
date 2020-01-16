@@ -1,4 +1,8 @@
-# signs 0.1.1
+# signs 0.1.2 (submitted 2020-01-15)
+
+* Fixed issue where `signs_format` would not work if package was not loaded.
+
+# signs 0.1.1 (released 2019-11-25)
 
 * Fixed [issue #2](https://github.com/BenjaminWolfe/signs/issues/2);
   tests had assumed a default accuracy of 1,
